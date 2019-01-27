@@ -1,0 +1,16 @@
+.app {
+	width: 500px;
+	
+}
+.app span {
+	margin-right: 0px;
+}
+.appHeader {
+	margin-right: 0px;
+    padding-right: 0px;
+}
+.col-5 {
+	margin-right: 0px;
+    text-align: right;
+    padding-right: 0px;
+}

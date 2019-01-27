@@ -1,0 +1,19 @@
+.todoListItem {
+	
+}
+button.btn-outline-danger {
+	margin-right: 3px;
+}
+.todoListItem .col-9 {
+	display: inline-block;
+	margin-top: 7px;
+    vertical-align: middle;
+}
+.done {
+	text-decoration: line-through;
+}
+
+.important {
+	color: blue;
+	font-weight: bold;
+}

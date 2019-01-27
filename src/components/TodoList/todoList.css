@@ -1,0 +1,8 @@
+.todoList {
+	padding: 0.25rem 0.9rem;
+}
+
+
+.todoList .list-group-item {
+	padding: 0.35rem 1.25rem;
+}
