@@ -1,15 +1,23 @@
-import React, { Component } from 'react';
-import TodoFilter from '../TodoFilter';
+import React, {Component} from 'react';
 
 export default class SearchPanel extends Component {
+    state = {
+        searchTask: ''
+    };
+    onChangeSearch = (e) => {
+        const searchTask = e.target.value
+        this.setState({ searchTask });
+        this.props.onSearchChage(searchTask);
+    };
 
-	render () {
-		
-		return (
-			<div className = "searchPanel container input-group">
-				<input className = "form-control" placeholder = "search" />
-				<TodoFilter />
-			</div>
-		)
-	}
+    render() {
+        return (
+                <input
+                    className="form-control"
+                    placeholder="search"
+                    value = {this.state.searchTask}
+                    onChange={this.onChangeSearch}
+                />
+        )
+    }
 }

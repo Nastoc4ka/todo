@@ -6,3 +6,6 @@
 .todoList .list-group-item {
 	padding: 0.35rem 1.25rem;
 }
+.displayHidden {
+	display: none;
+}

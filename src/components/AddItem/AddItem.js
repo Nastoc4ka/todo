@@ -3,15 +3,38 @@ import './addItem.css';
 
 export default class AddItem extends Component {
 
-	render () {
+    state = {
+        nTask: ''
+    }
+
+    newTaskRead = (e) => {
+        this.setState ({
+           nTask: e.target.value
+        })
+    }
+    onSubmit = (e) => {
+        e.preventDefault();
+        if (this.state.nTask === '') {return console.log('no item')}
+        this.props.addItem(this.state.nTask);
+        this.setState ({
+            nTask:''
+        })
+    }
+
+    render () {
 		
 		return (
-			<div className = "AddItem container input-group">
-				<input className = "form-control" id = 'newItem' placeholder = "input new item" />
+			<form className = "AddItem container input-group" onSubmit = {this.onSubmit}>
+				<input className = "form-control"
+                       id = 'newItem'
+                       placeholder = "input new item"
+                       onChange = {this.newTaskRead}
+                       value = {this.state.nTask}
+                />
 				<div className="btn-group input-group-append">
-					<button className="btn btn-outline-secondary btn-group input-group-append" onClick={() => this.props.addItem('hello world')}>Add Item</button>
+					<button className="btn btn-outline-secondary btn-group input-group-append">Add Item</button>
 				</div>
-			</div>
+			</form>
 		)
 	}
 }

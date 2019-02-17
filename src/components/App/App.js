@@ -4,6 +4,7 @@ import AppHeader from '../AppHeader';
 import SearchPanel from '../SearchPanel';
 import TodoList from '../TodoList';
 import AddItem from '../AddItem';
+import TodoFilter from '../TodoFilter';
 import './app.css';
 
 export default class App extends Component {
@@ -14,7 +15,9 @@ export default class App extends Component {
             this.createItem('Learn React'),
             this.createItem('Drink coffee'),
             this.createItem('create awesome react-app!')
-        ]
+        ],
+        term: '', //search task
+        filterActive: 'all' //all, active, done
     };
 
     createItem(task) {
@@ -22,6 +25,7 @@ export default class App extends Component {
             task,
             important: false,
             done: false,
+            display: true,
             id: this.maxId++
         }
     }
@@ -41,7 +45,20 @@ export default class App extends Component {
             }
         );
     };
-
+    onToggleImportant = (id) => {
+        this.setState(({dataList}) => {
+            return {
+                dataList: this.toggleProperty(dataList, id, 'important')
+            }
+        })
+    };
+    onToggleDone = (id) => {
+        this.setState(({dataList}) => {
+            return {
+                dataList: this.toggleProperty(dataList, id, 'done')
+            }
+        })
+    };
     addItem = (text) => {
         //console.log(text);
         const newItem = this.createItem(text);
@@ -54,6 +71,19 @@ export default class App extends Component {
             }
         );
     };
+    onSearchChage = (term) => {
+        this.setState({term});
+    }
+    search = (dataList, term) => {
+        if(term.length === 0) {
+            return dataList
+        }
+        return dataList.filter((arr) => {
+            return arr.task
+                .toLowerCase()
+                .indexOf(term.toLowerCase()) !== -1;
+        });
+    };
 
     toggleProperty(arr, id, property) {
         const idx = arr.findIndex((el) => el.id === id);
@@ -64,25 +94,31 @@ export default class App extends Component {
             ...arr.slice(idx + 1)];
     };
 
-    onToggleImportant = (id) => {
-        this.setState(({dataList}) => {
-            return {
-                dataList: this.toggleProperty(dataList, id, 'important')
-            }
-        })
-    };
+    setFilterActive = (filterActive) => {
+        this.setState({ filterActive });
+    }
 
-    onToggleDone = (id) => {
-        this.setState(({dataList}) => {
-            return {
-                dataList: this.toggleProperty(dataList, id, 'done')
-            }
-        })
-    };
+    filterTask = (filterData, filterActive) => {
+        console.log(filterActive);
+        console.log(filterData);
+        switch(filterActive) {
+            case 'all':
+                return filterData;
+            case 'active':
+                return filterData.filter(({done}) => !done);
+            case 'done':
+                return filterData.filter(({done}) => done);
+            default:
+                return filterData;
+        }
+    }
+
+
 
     render() {
         const dateMonth = new Date().toLocaleString("en-us", {month: "long"});
-        const {dataList} = this.state;
+        const {dataList, term, filterActive} = this.state;
+        const visibleData = this.filterTask(this.search(dataList, term), filterActive);
         const doneCount = dataList.filter((el) => el.done).length;
         const toDo = dataList.length - doneCount;
 
@@ -90,9 +126,20 @@ export default class App extends Component {
             <div className="app container">
                 <span>{dateMonth} {new Date().getDate()}, {new Date().getFullYear()}</span>
                 <AppHeader toDo={toDo} done={doneCount}/>
-                <SearchPanel/>
+                <div className = "main-panel container input-group">
+                    <SearchPanel
+                        onSearchChage={this.onSearchChage}
+                        showAllTasks={this.showAllTasks}
+                        showActiveTasks={this.showActiveTasks}
+                        showDoneTasks={this.showDoneTasks}
+                    />
+                    <TodoFilter
+                        filterActive={filterActive}
+                        setFilterActive = {this.setFilterActive}
+                    />
+                </div>
                 <TodoList
-                    todos={dataList}
+                    todos={visibleData}
                     onDelete={this.deleteItem}
                     onToggleImportant={this.onToggleImportant}
                     onToggleDone={this.onToggleDone}/>

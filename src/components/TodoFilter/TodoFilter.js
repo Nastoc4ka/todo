@@ -1,14 +1,30 @@
-import React from 'react';
+import React, {Component} from 'react';
 import './todoFilter.css';
 
-const TodoFilter = () => {
-	return (
-		<div className="todoFilter btn-group input-group-append">
-			<button className="btn btn-info">All</button>
-			<button className="btn btn-outline-secondary">Active</button>
-			<button className="btn btn-outline-secondary">Done</button>
-		</div>
-	)
-};
+export default class TodoFilter extends Component {
 
-export default TodoFilter;
+    buttons = [
+        {name: 'all', buttonName: 'All'},
+        {name: 'active', buttonName: 'Active'},
+        {name: 'done', buttonName: 'Done'}
+    ]
+
+
+
+    render() {
+        const {filterActive, setFilterActive} = this.props;
+
+        const buttonsToShow = this.buttons.map(({name, buttonName}) => {
+            const active = filterActive === name;
+            const clazz = active ? 'btn-info' : 'btn-outline-secondary';
+            return <button className={`btn ${clazz}`} key={name} onClick={() => setFilterActive(name)}>{buttonName}</button>
+        })
+
+        return (
+            <div className="todoFilter btn-group input-group-append">
+                {buttonsToShow}
+            </div>
+        )
+
+    }
+};
